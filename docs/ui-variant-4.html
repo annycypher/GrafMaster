@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вариант 4 «CalcDocs» — веб-сервис</title>
+<style>
+:root{--bg:#f6f7f9;--panel:#fff;--line:#e5e9f0;--text:#101828;--muted:#667085;--accent:#3b82f6;--accent2:#2563eb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.hwrap{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px}
+.logo{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.logo .em{width:30px;height:30px;background:var(--accent);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav{display:flex;gap:2px;flex:1}
+.nav a{padding:7px 12px;border-radius:8px;font-size:14px;color:var(--muted);text-decoration:none;cursor:pointer}
+.nav a:hover{background:#eef2f7;color:var(--text)}
+.nav a.active{background:#e8f0fe;color:var(--accent2);font-weight:600}
+.theme{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:15px}
+.install{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer}
+.container{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+.hero{background:linear-gradient(135deg,#eff6ff,#f0f9ff);border:1px solid #dbeafe;border-radius:20px;padding:36px;text-align:center;margin-bottom:28px}
+.badge{display:inline-block;background:#dbeafe;color:#1e40af;border-radius:20px;padding:5px 14px;font-size:12px;margin-bottom:14px;font-weight:600}
+.hero h1{font-size:30px;margin-bottom:10px}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 20px;font-size:15px}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 20px;font-size:14px;cursor:pointer;font-weight:600}
+.btn.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+.btnrow{display:flex;gap:10px;justify-content:center}
+.cat-title{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:26px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.15s}
+.card:hover{box-shadow:0 6px 18px rgba(16,24,40,.08);transform:translateY(-2px)}
+.card .ic{width:40px;height:40px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
+.card b{font-size:14px;display:block;margin-bottom:4px}
+.workspace{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(16,24,40,.05)}
+.wbar{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fafbfc}
+.wbody{display:flex;min-height:430px}
+.wside{width:230px;border-right:1px solid var(--line);padding:14px}
+.wmain{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f8fafc;padding:18px}
+.wright{width:250px;border-left:1px solid var(--line);padding:14px}
+.mode{display:flex;background:#eef2f7;border-radius:10px;padding:3px}
+.mode button{border:0;background:transparent;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer}
+.mode button.active{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+input[type=text]{padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;width:230px}
+.product{padding:8px 10px;border-radius:10px;font-size:13px;cursor:pointer;margin-bottom:4px}
+.product:hover{background:#f2f4f7}
+.product.active{background:#e8f0fe;color:#1e40af;font-weight:600}
+.mini{width:260px;height:347px;background:#fff;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.10);display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid var(--line)}
+.mini .photo{flex:1;background:#f8fafc;display:flex;align-items:center;justify-content:center;color:#98a2b3;font-size:11px}
+.mini .plate{background:var(--accent);color:#fff;padding:9px 12px;font-size:12px;font-weight:700}
+.mini .txt{padding:9px 12px;font-size:10px;color:var(--muted)}
+.arrows{display:flex;gap:8px;margin-top:12px}
+.arrows button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:16px;cursor:pointer}
+.counter{position:absolute;top:10px;right:12px;background:rgba(16,24,40,.75);color:#fff;border-radius:20px;padding:2px 9px;font-size:11px}
+h4{font-size:12px;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.field{margin-bottom:10px}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:10px;font-size:13px}
+.engchips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);background:#fafbfc;font-size:12px;color:var(--muted);align-items:center}
+.engchip{padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.engchip.on{background:#e8f0fe;color:#1e40af;border-color:#bfdbfe;font-weight:600}
+.tab-page{display:none}
+.tab-page.active{display:block}
+.layer{padding:8px 10px;font-size:12px;border-radius:10px;margin-bottom:3px;background:#f8fafc;border:1px solid var(--line);display:flex;justify-content:space-between}
+footer{border-top:1px solid var(--line);background:#fff;padding:20px;text-align:center;color:var(--muted);font-size:12px}
+footer a{color:var(--muted);text-decoration:none;margin:0 10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <div class="logo"><span class="em">🖌️</span>CalcInfografika</div>
+    <nav class="nav">
+      <a class="active" data-tab="home">Главная</a>
+      <a data-tab="project">Проект карточек</a>
+      <a data-tab="templates">Шаблоны</a>
+      <a data-tab="settings">Настройки</a>
+    </nav>
+    <button class="theme" title="Тема">🌓</button>
+    <button class="install">⬇️ Скачать на рабочий стол</button>
+  </div>
+</header>
+<div class="container">
+  <div class="tab-page active" id="tab-home">
+    <div class="hero">
+      <span class="badge">Бесплатно · офлайн · по вашему ключу DeepSeek</span>
+      <h1>Генератор инфографики для маркетплейсов</h1>
+      <p>Собирайте карточки 900×1200 из фото, Excel-характеристик и иконок одним кликом. Всё работает локально на вашем компьютере.</p>
+      <div class="btnrow">
+        <button class="btn">Начать сборку</button>
+        <button class="btn ghost">Посмотреть пример</button>
+      </div>
+    </div>
+    <div class="cat-title">🛠 Режимы работы</div>
+    <div class="grid">
+      <div class="card"><div class="ic">📁</div><b>Из папки</b><span style="font-size:12px;color:var(--muted)">Фото уже на диске — выберите папку.</span></div>
+      <div class="card"><div class="ic">🌐</div><b>Онлайн-поиск</b><span style="font-size:12px;color:var(--muted)">Ищем фото по названию товара.</span></div>
+      <div class="card"><div class="ic">🧩</div><b>По образцу</b><span style="font-size:12px;color:var(--muted)">Разбираем картинку на слои-шаблон.</span></div>
+      <div class="card"><div class="ic">🎨</div><b>Движки</b><span style="font-size:12px;color:var(--muted)">Pillow, Inkscape, PS/Corel, SAM2.</span></div>
+    </div>
+    <div class="cat-title">📤 Экспорт</div>
+    <div class="grid">
+      <div class="card"><div class="ic">🖼️</div><b>PNG / JPG</b><span style="font-size:12px;color:var(--muted)">Карточки 900×1200 файлами.</span></div>
+      <div class="card"><div class="ic">📄</div><b>PDF</b><span style="font-size:12px;color:var(--muted)">7 карточек одним документом.</span></div>
+      <div class="card"><div class="ic">🖌️</div><b>SVG / .fig / Figma</b><span style="font-size:12px;color:var(--muted)">Редактируемые версии проекта.</span></div>
+    </div>
+    <div class="cat-title">💼 Текущий проект</div>
+    <div class="workspace">
+      <div class="wbar">
+        <div class="mode">
+          <button class="active" data-mode="folder">📁 Из папки</button>
+          <button data-mode="online">🌐 Онлайн</button>
+        </div>
+        <button class="btn" id="btn-folder">Выбрать папку</button>
+        <input type="text" id="inp-search" placeholder="Поиск товара в интернете..." style="display:none">
+        <button class="btn ghost" id="btn-search" style="display:none">Найти</button>
+        <span style="flex:1"></span>
+        <button class="btn ghost">Скачать JPG</button>
+        <button class="btn ghost">Скачать PDF</button>
+        <button class="btn ghost">Скачать SVG</button>
+        <button class="btn ghost">Скачать .fig</button>
+        <button class="btn">Вставить в Figma</button>
+      </div>
+      <div class="wbody">
+        <div class="wside">
+          <h4>Товары (Excel)</h4>
+          <div class="product active">Стиральная машина</div>
+          <div class="product">Холодильник</div>
+          <div class="product">Микроволновка</div>
+          <div class="product">Пылесос</div>
+          <button class="btn ghost" style="width:100%;margin-top:10px">Загрузить Excel</button>
+        </div>
+        <div class="wmain">
+          <div class="mini">
+            <div class="counter" id="card-counter">001</div>
+            <div class="photo">Фото товара (PNG)</div>
+            <div class="plate">Стиральная машина</div>
+            <div class="txt">🔹 Мощность: 2200 Вт<br>🔹 Загрузка: 7 кг</div>
+          </div>
+          <div class="arrows">
+            <button id="prev">←</button>
+            <button id="next">→</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">Карточка 1 из 7 · 900×1200</div>
+        </div>
+        <div class="wright">
+          <h4>Свойства карточки</h4>
+          <div class="field"><label>Название</label><input type="text" value="Стиральная машина"></div>
+          <div class="field"><label>Характеристика</label><input type="text" value="Мощность: 2200 Вт"></div>
+          <div class="field"><label>Цвет плашки</label><input type="color" value="#3b82f6" style="height:32px;width:100%"></div>
+          <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+        </div>
+      </div>
+      <div class="engchips">
+        <span>Движки:</span>
+        <span class="engchip on">Pillow</span>
+        <span class="engchip">Inkscape</span>
+        <span class="engchip">PS/Corel</span>
+        <span class="engchip on">rembg</span>
+        <span class="engchip">SAM2</span>
+        <span style="flex:1"></span>
+        <span>Готово: 3 · В очереди: 2</span>
+      </div>
+    </div>
+  </div>
+  <div class="tab-page" id="tab-project">
+    <div class="cat-title">💼 Проект карточек</div>
+    <div class="workspace">
+      <div class="wbar">
+        <span style="font-size:13px;color:var(--muted)">Проект:</span> <b>Стиральная машина</b>
+        <span style="flex:1"></span>
+        <button class="btn ghost">Скачать JPG</button>
+        <button class="btn ghost">Скачать PDF</button>
+        <button class="btn ghost">Скачать SVG</button>
+        <button class="btn ghost">Скачать .fig</button>
+        <button class="btn">Сохранить</button>
+        <button class="btn ghost">Отмена</button>
+      </div>
+      <div class="wbody">
+        <div class="wside">
+          <h4>Комплекты</h4>
+          <div class="product active">Стиральная машина</div>
+          <div class="product">Холодильник</div>
+          <div class="product">Микроволновка</div>
+        </div>
+        <div class="wmain">
+          <div class="mini">
+            <div class="counter">002</div>
+            <div class="photo">Фото товара (PNG)</div>
+            <div class="plate">Стиральная машина</div>
+            <div class="txt">🔹 Загрузка: 7 кг</div>
+          </div>
+          <div class="arrows"><button>←</button><button>→</button></div>
+        </div>
+        <div class="wright">
+          <h4>Слои</h4>
+          <div class="layer" style="background:#e8f0fe;border-color:#bfdbfe"><span>Фото товара</span><span>🖼</span></div>
+          <div class="layer"><span>Плашка названия</span><span>▮</span></div>
+          <div class="layer"><span>Текст: Мощность</span><span>T</span></div>
+          <div class="layer"><span>Иконка ⚡</span><span>⚡</span></div>
+          <div class="field" style="margin-top:12px"><label>Текст слоя</label><input type="text" value="Мощность: 2200 Вт"></div>
+          <div class="field"><label>Цвет</label><input type="color" value="#3b82f6" style="height:32px;width:100%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-page" id="tab-templates">
+    <div class="cat-title">🧩 Шаблоны «по образцу»</div>
+    <div class="workspace">
+      <div class="wbar">
+        <button class="btn">Загрузить образец</button>
+        <input type="text" placeholder="или найти образец в интернете...">
+        <button class="btn ghost">Найти</button>
+      </div>
+      <div class="wbody">
+        <div class="wmain" style="align-items:stretch">
+          <div style="background:#fff;border:2px dashed #93c5fd;border-radius:12px;width:100%;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="border:2px dashed var(--accent);border-radius:8px;padding:30px;text-align:center;color:var(--muted)">Зона фото товара (авто)</div>
+            <div style="background:var(--accent);color:#fff;border-radius:8px;padding:12px">Плашка названия</div>
+            <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Текстовый блок из Excel</div>
+            <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Иконки</div>
+          </div>
+        </div>
+        <div class="wright">
+          <h4>Найденные зоны</h4>
+          <div class="layer" style="background:#e8f0fe;border-color:#bfdbfe"><span>Фото (90×120px)</span><span>✓</span></div>
+          <div class="layer"><span>Плашка (низ)</span><span>✓</span></div>
+          <div class="layer"><span>Тексты ×2</span><span>✓</span></div>
+          <button class="btn" style="width:100%;margin-top:12px">Сохранить шаблон</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-page" id="tab-settings">
+    <div class="cat-title">⚙️ Настройки</div>
+    <div class="workspace" style="max-width:640px;padding:20px">
+      <h4>DeepSeek</h4>
+      <div class="field"><label>API-ключ (хранится локально)</label><input type="text" value="sk-..."></div>
+      <h4>Движки</h4>
+      <div class="field"><label>Сборка</label><select><option>Pillow</option><option>Inkscape</option><option>PS/Corel</option></select></div>
+      <div class="field"><label>Замена фона</label><select><option>rembg</option><option>SAM2 (GPU)</option></select></div>
+      <h4>Палитра</h4>
+      <div class="field"><label>Основной цвет</label><input type="color" value="#3b82f6" style="height:32px;width:100%"></div>
+      <h4>Формат</h4>
+      <div class="field"><label>Размер</label><input type="text" value="900 × 1200 px"></div>
+      <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+    </div>
+  </div>
+  <footer>
+    <p>🔒 Все данные обрабатываются на вашем устройстве и не передаются на сервер. © 2026 CalcInfografika.</p>
+    <p style="margin-top:6px"><a href="#">О проекте</a><a href="#">Конфиденциальность</a><a href="#">Помощь</a></p>
+  </footer>
+</div>
+<script>
+document.querySelectorAll('.nav a').forEach(n=>n.onclick=()=>{
+  document.querySelectorAll('.nav a').forEach(x=>x.classList.toggle('active',x===n));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+n.dataset.tab));
+});
+document.querySelectorAll('.mode button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.mode button').forEach(x=>x.classList.toggle('active',x===b));
+  var on=b.dataset.mode==='online';
+  document.getElementById('btn-folder').style.display=on?'none':'inline-block';
+  document.getElementById('inp-search').style.display=on?'':'none';
+  document.getElementById('btn-search').style.display=on?'':'none';
+});
+var ci=0;
+document.getElementById('next').onclick=()=>{ci=(ci+1)%7;document.getElementById('card-counter').textContent=String(ci+1).padStart(3,'0');};
+document.getElementById('prev').onclick=()=>{ci=(ci+6)%7;document.getElementById('card-counter').textContent=String(ci+1).padStart(3,'0');};
+</script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вариант 6 «GrafMaster Neon» — фиолетовый неон</title>
+<style>
+:root{--bg:#0d0714;--panel:#150b20;--panel2:#1c112e;--line:#39274f;--text:#f1eaff;--muted:#a58fc9;--accent:#a855f7;--accent2:#c084fc;--neon1:#8b5cf6;--neon2:#a855f7;--glow1:#2a1150;--glow2:#1e1033}
+body.light{--bg:#f4f6fb;--panel:#fff;--panel2:#eef1f6;--line:#d7dce6;--text:#111827;--muted:#5b6472;--accent:#7c3aed;--accent2:#6d28d9;--neon1:#8b5cf6;--neon2:#7c3aed;--glow1:#ede9fe;--glow2:#f3f0fd}
+body.a11y{--bg:#000;--panel:#000;--panel2:#0e0e0e;--line:#a855f7;--text:#ffffff;--muted:#d7c9f2;--accent:#a855f7;--accent2:#c084fc;--neon1:#a855f7;--neon2:#a855f7;--glow1:#000;--glow2:#000}
+body.light .btn.ghost{background:#f9fafb;color:#1f2937;border-color:var(--line)}
+body.light .btn.ghost:hover{box-shadow:0 0 10px rgba(124,58,237,.35)}
+body.light .modal-box{background:#fff;border-color:var(--line);color:var(--text)}
+body.light .modal-head,body.light .modal-foot{border-color:var(--line)}
+body.light .modal-head button{color:var(--muted)}
+body.light .ic-tabs button,body.light .icon-cell,body.light .layer{background:#f8fafc;color:var(--text);border-color:var(--line)}
+body.light .layer.active{background:#f3e8ff;border-color:var(--accent)}
+body.light .ic-tabs button.active{background:#f3e8ff;color:#6d28d9;border-color:#a855f7}
+body.light .chip{background:#f3e8ff;color:#6d28d9;border-color:#e9d5ff}
+body.light .theme,body.light .a11ybtn{background:var(--panel);color:var(--text)}
+body.light .product{background:#fff;color:var(--text);border-color:var(--line)}
+body.light .product.active{color:#6d28d9}
+body.light .mini-card{border-color:#c4b5e3}
+body.light .mini-card .mphoto,body.light .card .photo{color:#6d5a96}
+body.light .mini-card .mplate{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff}
+body.light .icon-btn{background:#efe9fb;border-color:#b9a7dd;color:#3f3455}
+body.light .layer{background:#f8fafc;color:var(--text)}
+body.light .engchip{background:#fff;color:var(--text);border-color:var(--line)}
+body.light .arrows button{background:#fff;color:var(--text);border-color:var(--line)}
+body.light .hint{color:#4b5563}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(1200px 700px at 20% -10%,var(--glow1) 0%,var(--bg) 55%);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{background:rgba(20,11,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:16px}
+.logo{font-weight:800;font-size:17px;display:flex;align-items:center;gap:9px;cursor:pointer}
+.logo .pal{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 0deg,#ef4444,#f59e0b,#22c55e,#8b5cf6,#d946ef,#ef4444);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 14px rgba(168,85,247,.6)}
+.tabs{display:flex;gap:4px;flex:1}
+.tab{padding:8px 16px;border-radius:9px 9px 0 0;font-size:14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent2);border-bottom-color:var(--accent);font-weight:600;text-shadow:0 0 10px rgba(192,132,252,.6)}
+.chip{font-size:12px;background:rgba(168,85,247,.12);border:1px solid var(--line);border-radius:20px;padding:5px 12px;color:var(--muted)}
+.theme{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);cursor:pointer;font-size:16px}
+.a11ybtn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:700}
+body.a11y{font-size:115%}
+body.a11y .btn,body.a11y .tab,body.a11y .product,body.a11y .engchip,body.a11y .layer,body.a11y .mini-card,body.a11y input,body.a11y select,body.a11y .a11ybtn,body.a11y .chip{font-size:16px}
+.toolbar{background:rgba(20,11,32,.7);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mode{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.mode button{border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:9px;font-size:13px;cursor:pointer}
+.mode button.active{background:linear-gradient(135deg,var(--neon1),var(--neon2));color:#fff;font-weight:600;box-shadow:0 0 10px rgba(168,85,247,.6)}
+.btn{background:linear-gradient(135deg,var(--neon1),var(--neon2));color:#fff;border:0;border-radius:12px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:600;box-shadow:0 0 12px rgba(168,85,247,.55),inset 0 0 6px rgba(255,255,255,.15);transition:.15s}
+.btn:hover{box-shadow:0 0 22px rgba(168,85,247,.9)}
+.btn.ghost{background:rgba(168,85,247,.07);color:#dccff5;border:1px solid #513a77;box-shadow:none;font-weight:400}
+.btn.ghost:hover{box-shadow:0 0 10px rgba(168,85,247,.35)}
+input[type=text]{padding:8px 12px;border:1px solid var(--line);border-radius:12px;font-size:13px;width:240px;background:var(--panel2);color:var(--text)}
+.toolbar .spacer{flex:1}
+.content{flex:1;display:flex;overflow:hidden}
+.side{width:230px;background:rgba(20,11,32,.7);border-right:1px solid var(--line);padding:14px;overflow:auto}
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(800px 500px at 50% 30%,var(--glow2) 0%,var(--bg) 70%);padding:14px;overflow:hidden}
+.right{width:250px;background:rgba(20,11,32,.7);border-left:1px solid var(--line);padding:14px;overflow:auto}
+h3{font-size:12px;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.product{padding:8px 10px;border-radius:10px;font-size:13px;cursor:pointer;margin-bottom:4px;border:1px solid var(--line);background:var(--panel2)}
+.product:hover{border-color:var(--accent)}
+.product.active{border-color:var(--accent);background:rgba(168,85,247,.14);font-weight:600;color:var(--accent2);box-shadow:0 0 8px rgba(168,85,247,.3)}
+.card{width:300px;height:400px;background:#f4f0ff;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 24px rgba(168,85,247,.25);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.card .photo{flex:1;background:#ece5fa;display:flex;align-items:center;justify-content:center;color:#8b7bb0;font-size:12px}
+.card .plate{background:linear-gradient(135deg,var(--neon1),var(--neon2));color:#fff;padding:10px 14px;font-size:13px;font-weight:700}
+.card .text{padding:10px 14px;font-size:11px;color:#3f3455}
+.counter{position:absolute;top:10px;right:12px;background:rgba(13,7,20,.8);color:#d8c6f5;border:1px solid #513a77;border-radius:20px;padding:2px 9px;font-size:11px}
+.arrows{display:flex;gap:10px;margin-top:12px}
+.arrows button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:18px;cursor:pointer;box-shadow:0 0 6px rgba(168,85,247,.25)}
+.arrows button:hover{box-shadow:0 0 14px rgba(168,85,247,.6)}
+.strip{display:flex;gap:10px;overflow-x:auto;width:100%;max-width:780px;padding:14px 6px 4px}
+.mini-card{min-width:102px;height:136px;background:#f4f0ff;border:2px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;position:relative;transition:.15s}
+.mini-card:hover{transform:translateY(-2px)}
+.mini-card.active{border-color:var(--accent);box-shadow:0 0 14px rgba(168,85,247,.65)}
+.mini-card .mphoto{flex:1;background:#ece5fa;display:flex;align-items:center;justify-content:center;color:#a08fc4;font-size:9px}
+.mini-card .mplate{background:#8b5cf6;color:#fff;padding:5px 7px;font-size:8px;font-weight:700}
+.mini-card .mlabel{position:absolute;top:4px;right:6px;font-size:9px;color:#4c3a70}
+.hint{font-size:11px;color:var(--muted);margin-top:8px;text-align:center;max-width:560px}
+.hint b{color:var(--accent2)}
+.field{margin-bottom:10px}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:12px;font-size:13px;background:var(--panel2);color:var(--text)}
+.engbar{background:rgba(20,11,32,.8);border-top:1px solid var(--line);padding:8px 20px;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.engchip{padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);cursor:pointer}
+.engchip.on{background:rgba(168,85,247,.15);color:var(--accent2);border-color:var(--accent);font-weight:600;box-shadow:0 0 8px rgba(168,85,247,.35)}
+.tab-page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.tab-page.active{display:flex}
+.layer{padding:8px 10px;font-size:12px;border-radius:10px;margin-bottom:3px;background:var(--panel2);border:1px solid var(--line);display:flex;justify-content:space-between}
+.layer.active{background:rgba(168,85,247,.12);border-color:var(--accent)}
+.actions{display:flex;gap:8px;margin-top:8px}
+.icon-btn{cursor:pointer;border:1px dashed #a08fc4;border-radius:8px;padding:2px 6px;background:#efe9fb;font-size:13px;margin-left:4px}
+.icon-btn:hover{border-color:var(--accent);box-shadow:0 0 8px rgba(168,85,247,.5)}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:50}
+.modal.show{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(5,2,10,.75);backdrop-filter:blur(3px)}
+.modal-box{position:relative;background:#160c24;border:1px solid #513a77;border-radius:16px;width:560px;max-width:92vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(168,85,247,.35)}
+.modal-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.modal-head button{background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer}
+.modal-body{padding:14px 16px;overflow:auto}
+.ic-tabs{display:flex;gap:6px;margin-bottom:10px}
+.ic-tabs button{flex:1;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-size:12px;cursor:pointer}
+.ic-tabs button.active{background:rgba(168,85,247,.15);color:var(--accent2);border-color:var(--accent)}
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
+.icon-cell{aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
+.icon-cell:hover{border-color:var(--accent);box-shadow:0 0 12px rgba(168,85,247,.5);transform:scale(1.06)}
+.modal-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+body.a11y .mini-card,body.a11y .card{background:#fff;color:#000;border:3px solid var(--accent)}
+body.a11y .card .plate{background:linear-gradient(135deg,#8b5cf6,#a855f7);color:#fff}
+body.a11y .card .text,body.a11y .card .photo{color:#000}
+body.a11y .btn.ghost{background:#000;color:#fff;border:2px solid var(--accent)}
+body.a11y .mode button.active{background:#a855f7;color:#fff;box-shadow:none}
+body.a11y .icon-btn{background:#fff;color:#000;border:2px solid var(--accent)}
+body.a11y .a11ybtn{background:#a855f7;color:#fff;border-color:var(--accent)}
+body.a11y .product.active,body.a11y .engchip.on,body.a11y .tab.active{color:#c084fc}
+body.a11y .chip{background:#0e0e0e;color:#fff;border-color:var(--accent)}
+body.a11y .layer{background:#0e0e0e;color:#fff;border-color:var(--accent)}
+body.a11y .modal-box{background:#000;color:#fff;border-color:var(--accent)}
+body.a11y .modal-head,body.a11y .modal-foot{border-color:var(--accent)}
+body.a11y .icon-cell,body.a11y .ic-tabs button{background:#0e0e0e;color:#fff;border-color:var(--accent)}
+body.a11y .ic-tabs button.active,body.a11y .icon-cell:hover{background:#a855f7;color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><span class="pal">🎨</span>GrafMaster</div>
+  <div class="tabs">
+    <div class="tab active" data-tab="home">Главная</div>
+    <div class="tab" data-tab="project">Проект карточек</div>
+    <div class="tab" data-tab="templates">Шаблоны</div>
+    <div class="tab" data-tab="settings">Настройки</div>
+  </div>
+  <div class="chip">🔑 DeepSeek: подключён</div>
+  <button class="theme" id="themeBtn" title="Светлая / тёмная тема">☀️</button>
+  <button class="a11ybtn" id="a11yBtn" title="Версия для слабовидящих">👓 Aa</button>
+</header>
+<main style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+  <div class="tab-page active" id="tab-home">
+    <div class="toolbar">
+      <div class="mode">
+        <button class="active" data-mode="folder">📁 Из папки</button>
+        <button data-mode="online">🌐 Онлайн</button>
+      </div>
+      <button class="btn" id="btn-folder">Выбрать папку</button>
+      <input type="text" id="inp-search" placeholder="Название товара для поиска..." style="display:none">
+      <button class="btn ghost" id="btn-search" style="display:none">Найти</button>
+      <div class="spacer"></div>
+      <button class="btn ghost">Скачать JPG</button>
+      <button class="btn ghost">Скачать PDF</button>
+      <button class="btn ghost">Скачать SVG</button>
+      <button class="btn ghost">Скачать .fig</button>
+      <button class="btn">Вставить в Figma</button>
+    </div>
+    <div class="content">
+      <div class="side">
+        <h3>Комплекты</h3>
+        <div class="product active">Стиральная машина · 7</div>
+        <div class="product">Холодильник · 7</div>
+        <div class="product">Микроволновка · 7</div>
+        <div class="product">Пылесос · 7</div>
+        <button class="btn ghost" style="width:100%;margin-top:10px">Загрузить Excel</button>
+      </div>
+      <div class="stage">
+        <div class="card">
+          <div class="counter" id="card-counter">001</div>
+          <div class="photo" title="Клик по объекту — перемещение (в реальном приложении)">Фото товара (PNG)</div>
+          <div class="plate" title="Двойной клик — редактирование текста">Стиральная машина</div>
+          <div class="text" id="cardText"></div>
+        </div>
+        <div class="arrows">
+          <button id="prev">←</button>
+          <button id="next">→</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px">Карточка 1 из 7 · 900×1200</div>
+        <div class="strip">
+          <div class="mini-card active"><div class="mlabel">1</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">2</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">3</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">4</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">5</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">6</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+          <div class="mini-card"><div class="mlabel">7</div><div class="mphoto">Фото</div><div class="mplate">СМ</div></div>
+        </div>
+        <div class="hint">💡 Все 7 карточек товара видны сразу, лента прокручивается. Клик по карточке в ленте — выбор. В реальном приложении: клик по объекту — перемещение, двойной клик по тексту — редактирование, клик по иконке <b>⚡</b> — библиотека иконок.</div>
+      </div>
+      <div class="right">
+        <h3>Свойства</h3>
+        <div class="field"><label>Название</label><input type="text" value="Стиральная машина"></div>
+        <div class="field"><label>Характеристика</label><input type="text" value="Мощность: 2200 Вт"></div>
+        <div class="field"><label>Цвет плашки</label><input type="color" value="#a855f7" style="height:32px;width:100%"></div>
+        <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+        <div class="field"><label>Иконка</label><button class="btn ghost" style="width:100%" data-open-icons>🎨 Открыть библиотеку иконок</button></div>
+        <h3>Экспорт</h3>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn ghost">PNG · 900×1200</button>
+          <button class="btn ghost">JPG · 900×1200</button>
+          <button class="btn ghost">PDF · 7 стр.</button>
+        </div>
+      </div>
+    </div>
+    <div class="engbar">
+      <span>Движки:</span>
+      <span class="engchip on">Pillow</span>
+      <span class="engchip">Inkscape</span>
+      <span class="engchip">PS/Corel</span>
+      <span class="engchip on">rembg</span>
+      <span class="engchip">SAM2</span>
+      <span style="flex:1"></span>
+      <span>Очередь: 5 из 14</span>
+    </div>
+  </div>
+  <div class="tab-page" id="tab-project">
+    <div class="toolbar">
+      <span style="font-size:13px;color:var(--muted)">Проект:</span> <b>Стиральная машина</b>
+      <div class="spacer"></div>
+      <button class="btn ghost">Скачать JPG</button>
+      <button class="btn ghost">Скачать PDF</button>
+      <button class="btn ghost">Скачать SVG</button>
+      <button class="btn ghost">Скачать .fig</button>
+      <button class="btn">Сохранить</button>
+      <button class="btn ghost">Отмена</button>
+    </div>
+    <div class="content">
+      <div class="side">
+        <h3>Комплекты</h3>
+        <div class="product active">Стиральная машина</div>
+        <div class="product">Холодильник</div>
+        <div class="product">Микроволновка</div>
+      </div>
+      <div class="stage">
+        <div class="card">
+          <div class="counter">002</div>
+          <div class="photo">Фото товара (PNG)</div>
+          <div class="plate">Стиральная машина</div>
+          <div class="text">🔹 Загрузка: 7 кг</div>
+        </div>
+        <div class="arrows"><button>←</button><button>→</button></div>
+      </div>
+      <div class="right">
+        <h3>Слои</h3>
+        <div class="layer active"><span>Фото товара</span><span>🖼</span></div>
+        <div class="layer"><span>Плашка названия</span><span>▮</span></div>
+        <div class="layer"><span>Текст: Мощность</span><span>T</span></div>
+        <div class="layer"><span>Иконка ⚡</span><span>⚡</span></div>
+        <div class="field" style="margin-top:12px"><label>Текст слоя</label><input type="text" value="Мощность: 2200 Вт"></div>
+        <div class="field"><label>Цвет</label><input type="color" value="#a855f7" style="height:32px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-page" id="tab-templates">
+    <div class="toolbar">
+      <button class="btn">Загрузить образец</button>
+      <input type="text" placeholder="или найти образец в интернете...">
+      <button class="btn ghost">Найти</button>
+    </div>
+    <div class="content">
+      <div class="stage" style="align-items:stretch">
+        <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;flex:1;padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="border:2px dashed var(--accent);border-radius:8px;padding:30px;text-align:center;color:var(--muted)">Зона фото товара (авто)</div>
+          <div style="background:linear-gradient(135deg,var(--neon1),var(--neon2));color:#fff;border-radius:8px;padding:12px">Плашка названия</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Текстовый блок из Excel</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Иконки</div>
+        </div>
+      </div>
+      <div class="right">
+        <h3>Найденные зоны</h3>
+        <div class="layer active"><span>Фото (90×120px)</span><span>✓</span></div>
+        <div class="layer"><span>Плашка (низ)</span><span>✓</span></div>
+        <div class="layer"><span>Тексты ×2</span><span>✓</span></div>
+        <button class="btn" style="width:100%;margin-top:12px">Сохранить шаблон</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-page" id="tab-settings">
+    <div class="toolbar">Настройки</div>
+    <div style="flex:1;overflow:auto;padding:20px;background:var(--panel);max-width:640px">
+      <h3>DeepSeek</h3>
+      <div class="field"><label>API-ключ (хранится локально)</label><input type="text" value="sk-..."></div>
+      <h3>Движки</h3>
+      <div class="field"><label>Сборка</label><select><option>Pillow</option><option>Inkscape</option><option>PS/Corel</option></select></div>
+      <div class="field"><label>Замена фона</label><select><option>rembg</option><option>SAM2 (GPU)</option></select></div>
+      <h3>Библиотека иконок</h3>
+      <div class="field"><label>Папка с вашими иконками (PNG/SVG)</label><button class="btn ghost" style="width:100%" data-open-icons>📂 Выбрать папку иконок</button></div>
+      <h3>Палитра</h3>
+      <div class="field"><label>Основной цвет</label><input type="color" value="#a855f7" style="height:32px;width:100%"></div>
+      <h3>Формат</h3>
+      <div class="field"><label>Размер</label><input type="text" value="900 × 1200 px"></div>
+      <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+    </div>
+  </div>
+</main>
+<div class="modal" id="iconModal">
+  <div class="modal-bg"></div>
+  <div class="modal-box">
+    <div class="modal-head">🎨 Библиотека иконок <button id="closeIcons">✕</button></div>
+    <div class="modal-body">
+      <div class="ic-tabs">
+        <button class="active">Встроенные</button>
+        <button>Мои (загружены)</button>
+        <button>Подключить папку…</button>
+      </div>
+      <input type="text" placeholder="Поиск иконки..." style="width:100%;margin-bottom:10px">
+      <div class="icon-grid">
+        <div class="icon-cell">⚡</div><div class="icon-cell">❤️</div><div class="icon-cell">⭐</div><div class="icon-cell">🔥</div>
+        <div class="icon-cell">💧</div><div class="icon-cell">❄️</div><div class="icon-cell">🌀</div><div class="icon-cell">🧊</div>
+        <div class="icon-cell">🚿</div><div class="icon-cell">🔋</div><div class="icon-cell">🌡️</div><div class="icon-cell">💨</div>
+        <div class="icon-cell">⚙️</div><div class="icon-cell">🛠️</div><div class="icon-cell">🔒</div><div class="icon-cell">📦</div>
+        <div class="icon-cell">🎁</div><div class="icon-cell">👕</div><div class="icon-cell">🧺</div><div class="icon-cell">🧼</div>
+        <div class="icon-cell">✨</div><div class="icon-cell">🚀</div><div class="icon-cell">🪶</div><div class="icon-cell">🧲</div>
+      </div>
+    </div>
+    <div class="modal-foot">Выберите иконку — она заменит текущую на карточке. Вкладка «Мои» покажет ваши загруженные PNG/SVG.</div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.tab').forEach(n=>n.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===n));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+n.dataset.tab));
+});
+document.querySelectorAll('.mode button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.mode button').forEach(x=>x.classList.toggle('active',x===b));
+  var on=b.dataset.mode==='online';
+  document.getElementById('btn-folder').style.display=on?'none':'inline-block';
+  document.getElementById('inp-search').style.display=on?'':'none';
+  document.getElementById('btn-search').style.display=on?'':'none';
+});
+document.getElementById('themeBtn').onclick=()=>{document.body.classList.toggle('light');document.getElementById('themeBtn').textContent=document.body.classList.contains('light')?'🌙':'☀️';};
+document.getElementById('a11yBtn').onclick=()=>document.body.classList.toggle('a11y');
+var texts=["🔹 Мощность: 2200 Вт<br>🔹 Загрузка: 7 кг","🔹 Загрузка: 7 кг","🔹 Обороты: 1400 об/мин","🔹 Класс: A+++","🔹 Шум: 52 дБ","🔹 60×60×85 см","🔹 Гарантия: 3 года"];
+var icons=["⚡","💧","🌀","❄️","🔥","⭐","✅"];
+var ci=0;
+function setCard(i){ci=(i+7)%7;document.getElementById('card-counter').textContent=String(ci+1).padStart(3,'0');document.getElementById('cardText').innerHTML=texts[ci]+' <span class="icon-btn" id="cardIcon" title="Заменить иконку">'+icons[ci]+'</span>';document.querySelectorAll('.mini-card').forEach((m,j)=>m.classList.toggle('active',j===ci));bindIcon();}
+function bindIcon(){var ic=document.getElementById('cardIcon');if(ic)ic.onclick=()=>document.getElementById('iconModal').classList.add('show');}
+document.getElementById('next').onclick=()=>setCard(ci+1);
+document.getElementById('prev').onclick=()=>setCard(ci-1);
+document.querySelectorAll('.mini-card').forEach((m,j)=>m.onclick=()=>setCard(j));
+document.querySelectorAll('[data-open-icons]').forEach(b=>b.onclick=()=>document.getElementById('iconModal').classList.add('show'));
+document.getElementById('closeIcons').onclick=()=>document.getElementById('iconModal').classList.remove('show');
+document.querySelector('.modal-bg').onclick=()=>document.getElementById('iconModal').classList.remove('show');
+document.querySelectorAll('.icon-cell').forEach(c=>c.onclick=()=>{icons[ci]=c.textContent;setCard(ci);document.getElementById('iconModal').classList.remove('show');});
+setCard(0);
+</script>
+</body>
+</html>

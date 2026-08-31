@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Сборка и установщики
+build/
+dist/
+*.spec
+*.exe
+*.msi
+
+# Модели ИИ (скачиваются при первом запуске)
+models/
+*.onnx
+
+# Выходные файлы (карточки, PDF)
+output/
+
+# Секреты и настройки пользователя
+config.json
+*.key
+.env
+
+# IDE
+.idea/
+.vscode/

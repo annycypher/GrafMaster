@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вариант 3 «Студия» — тёмный редактор</title>
+<style>
+:root{--bg:#0f1115;--panel:#181b21;--panel2:#1e2229;--line:#2a2f3a;--text:#e6e9ef;--muted:#8b93a3;--accent:#38bdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;overflow:hidden}
+.rail{width:64px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:6px}
+.tool{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:var(--muted)}
+.tool:hover{background:var(--panel2);color:#fff}
+.tool.active{background:var(--accent);color:#0f1115}
+.rail .spacer{flex:1}
+main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:10px;align-items:center}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb b{color:var(--text)}
+.topbar .spacer{flex:1}
+.btn{background:var(--accent);color:#0f1115;font-weight:600;border:0;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer}
+.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.mode{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+.mode button{border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer}
+.mode button.active{background:var(--accent);color:#0f1115;font-weight:600}
+.workspace{flex:1;display:flex;overflow:hidden}
+.canvas{flex:1;background:#111318;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(#1b1f28 1px,transparent 1px);background-size:24px 24px}
+.layers{width:280px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:auto}
+.layers .head{padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.layer{padding:9px 14px;font-size:13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;cursor:pointer}
+.layer:hover{background:var(--panel2)}
+.layer.active{background:#123044;color:#7dd3fc;border-left:3px solid var(--accent)}
+.layer .ic{opacity:.6}
+.card{width:330px;height:440px;background:#fff;border-radius:4px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.card .photo{flex:1;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:12px}
+.card .plate{background:#0ea5e9;color:#fff;padding:12px 16px;font-size:14px;font-weight:700}
+.card .text{padding:12px 16px;font-size:12px;color:#4b5563}
+.counter{position:absolute;top:12px;right:14px;background:rgba(15,23,42,.8);color:#fff;border-radius:20px;padding:3px 10px;font-size:12px}
+.arrows{display:flex;gap:10px;margin-top:16px}
+.arrows button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:18px;cursor:pointer}
+.bottombar{background:var(--panel);border-top:1px solid var(--line);padding:8px 16px;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.engchip{padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);cursor:pointer}
+.engchip.on{background:var(--accent);color:#0f1115;border-color:var(--accent);font-weight:600}
+.tab-page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.tab-page.active{display:flex}
+input[type=text]{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:7px 12px;font-size:13px;width:240px}
+.field{margin-bottom:10px}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:var(--panel2);color:var(--text)}
+h4{font-size:11px;text-transform:uppercase;color:var(--muted);margin:12px 0 6px}
+.actions{display:flex;gap:8px;margin-top:10px}
+</style>
+</head>
+<body>
+<nav class="rail">
+  <div class="tool active" data-tab="home" title="Главная">🏠</div>
+  <div class="tool" data-tab="project" title="Проект карточек">🃏</div>
+  <div class="tool" data-tab="templates" title="Шаблоны">🧩</div>
+  <div class="spacer"></div>
+  <div class="tool" data-tab="settings" title="Настройки">⚙️</div>
+</nav>
+<main>
+  <div class="tab-page active" id="tab-home">
+    <div class="topbar">
+      <div class="crumb">Комплект: <b>Стиральная машина</b> · карточка <b id="card-counter">001</b>/7</div>
+      <div class="spacer"></div>
+      <div class="mode">
+        <button class="active" data-mode="folder">📁 Папка</button>
+        <button data-mode="online">🌐 Онлайн</button>
+      </div>
+      <button class="btn ghost" id="btn-folder">Выбрать папку</button>
+      <input type="text" id="inp-search" placeholder="Название товара..." style="display:none">
+      <button class="btn ghost" id="btn-search" style="display:none">Найти</button>
+      <div class="spacer"></div>
+      <button class="btn ghost">JPG</button>
+      <button class="btn ghost">PDF</button>
+      <button class="btn ghost">SVG</button>
+      <button class="btn ghost">.fig</button>
+      <button class="btn">Вставить в Figma</button>
+    </div>
+    <div class="workspace">
+      <div class="canvas">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="card">
+            <div class="counter">001</div>
+            <div class="photo">Фото товара (PNG)</div>
+            <div class="plate">Стиральная машина</div>
+            <div class="text">🔹 Мощность: 2200 Вт<br>🔹 Загрузка: 7 кг</div>
+          </div>
+          <div class="arrows">
+            <button id="prev">←</button>
+            <button id="next">→</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px">900 × 1200 px</div>
+        </div>
+      </div>
+      <div class="layers">
+        <div class="head">Слои <span>7 элементов</span></div>
+        <div class="layer active"><span>Фото товара</span><span class="ic">🖼</span></div>
+        <div class="layer"><span>Плашка названия</span><span class="ic">▮</span></div>
+        <div class="layer"><span>Текст: Мощность</span><span class="ic">T</span></div>
+        <div class="layer"><span>Иконка ⚡</span><span class="ic">⚡</span></div>
+        <div class="layer"><span>Рамка</span><span class="ic">⬜</span></div>
+        <div class="head">Свойства</div>
+        <div style="padding:12px 14px">
+          <div class="field"><label>Текст слоя</label><input type="text" value="Мощность: 2200 Вт"></div>
+          <div class="field"><label>Цвет</label><input type="color" value="#0ea5e9" style="height:32px;width:100%"></div>
+          <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+          <div class="actions">
+            <button class="btn" style="flex:1">Сохранить</button>
+            <button class="btn ghost" style="flex:1">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottombar">
+      <span>Движки:</span>
+      <span class="engchip on">Pillow</span>
+      <span class="engchip">Inkscape</span>
+      <span class="engchip">PS/Corel</span>
+      <span class="engchip on">rembg</span>
+      <span class="engchip">SAM2</span>
+      <span style="flex:1"></span>
+      <span>Готово: 3 · В очереди: 2</span>
+    </div>
+  </div>
+  <div class="tab-page" id="tab-project">
+    <div class="topbar">
+      <div class="crumb">Проект: <b>Стиральная машина</b></div>
+      <div class="spacer"></div>
+      <button class="btn ghost">Скачать JPG</button>
+      <button class="btn ghost">Скачать PDF</button>
+      <button class="btn ghost">Скачать SVG</button>
+      <button class="btn ghost">Скачать .fig</button>
+      <button class="btn">Сохранить</button>
+      <button class="btn ghost">Отмена</button>
+    </div>
+    <div class="workspace">
+      <div class="canvas">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="card">
+            <div class="counter">002</div>
+            <div class="photo">Фото товара (PNG)</div>
+            <div class="plate">Стиральная машина</div>
+            <div class="text">🔹 Загрузка: 7 кг</div>
+          </div>
+          <div class="arrows"><button>←</button><button>→</button></div>
+        </div>
+      </div>
+      <div class="layers">
+        <div class="head">Слои <span>7 элементов</span></div>
+        <div class="layer active"><span>Фото товара</span><span class="ic">🖼</span></div>
+        <div class="layer"><span>Плашка названия</span><span class="ic">▮</span></div>
+        <div class="layer"><span>Текст: Мощность</span><span class="ic">T</span></div>
+        <div class="layer"><span>Иконка ⚡</span><span class="ic">⚡</span></div>
+        <div class="layer"><span>Рамка</span><span class="ic">⬜</span></div>
+        <div class="head">Свойства</div>
+        <div style="padding:12px 14px">
+          <div class="field"><label>Текст слоя</label><input type="text" value="Мощность: 2200 Вт"></div>
+          <div class="field"><label>Цвет</label><input type="color" value="#0ea5e9" style="height:32px;width:100%"></div>
+          <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+          <div class="actions">
+            <button class="btn" style="flex:1">Сохранить</button>
+            <button class="btn ghost" style="flex:1">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-page" id="tab-templates">
+    <div class="topbar">
+      <button class="btn">Загрузить образец</button>
+      <input type="text" placeholder="или найти образец в интернете...">
+      <button class="btn ghost">Найти</button>
+    </div>
+    <div class="workspace">
+      <div class="canvas" style="padding:24px">
+        <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;width:100%;height:100%;padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="border:2px dashed var(--accent);border-radius:8px;padding:30px;text-align:center;color:var(--muted)">Зона фото товара (авто)</div>
+          <div style="background:#0ea5e9;color:#fff;border-radius:8px;padding:12px">Плашка названия</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Текстовый блок из Excel</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--muted)">Иконки</div>
+        </div>
+      </div>
+      <div class="layers">
+        <div class="head">Найденные зоны</div>
+        <div class="layer active"><span>Фото (90×120px)</span><span>✓</span></div>
+        <div class="layer"><span>Плашка (низ)</span><span>✓</span></div>
+        <div class="layer"><span>Тексты ×2</span><span>✓</span></div>
+        <div style="padding:12px 14px"><button class="btn" style="width:100%">Сохранить шаблон</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-page" id="tab-settings">
+    <div class="topbar">Настройки</div>
+    <div class="workspace">
+      <div class="canvas" style="padding:24px;align-items:flex-start">
+        <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;width:480px;padding:20px">
+          <h4>DeepSeek</h4>
+          <div class="field"><label>API-ключ (хранится локально)</label><input type="text" value="sk-..."></div>
+          <h4>Движки</h4>
+          <div class="field"><label>Сборка</label><select><option>Pillow</option><option>Inkscape</option><option>PS/Corel</option></select></div>
+          <div class="field"><label>Замена фона</label><select><option>rembg</option><option>SAM2 (GPU)</option></select></div>
+          <h4>Палитра</h4>
+          <div class="field"><label>Основной цвет</label><input type="color" value="#0ea5e9" style="height:32px;width:100%"></div>
+          <h4>Формат</h4>
+          <div class="field"><label>Размер</label><input type="text" value="900 × 1200 px"></div>
+          <div class="field"><label>Шрифт</label><select><option>Inter</option><option>Manrope</option><option>Rubik</option></select></div>
+        </div>
+      </div>
+      <div class="layers">
+        <div class="head">Справка</div>
+        <div class="layer"><span>Горячие клавиши</span><span>⌨</span></div>
+        <div class="layer"><span>Лицензии</span><span>©</span></div>
+      </div>
+    </div>
+  </div>
+<script>
+document.querySelectorAll('.tool').forEach(n=>n.onclick=()=>{
+  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===n));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+n.dataset.tab));
+});
+document.querySelectorAll('.mode button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.mode button').forEach(x=>x.classList.toggle('active',x===b));
+  var on=b.dataset.mode==='online';
+  document.getElementById('btn-folder').style.display=on?'none':'inline-block';
+  document.getElementById('inp-search').style.display=on?'':'none';
+  document.getElementById('btn-search').style.display=on?'':'none';
+});
+var ci=0;
+document.getElementById('next').onclick=()=>{ci=(ci+1)%7;document.getElementById('card-counter').textContent=String(ci+1).padStart(3,'0');};
+document.getElementById('prev').onclick=()=>{ci=(ci+6)%7;document.getElementById('card-counter').textContent=String(ci+1).padStart(3,'0');};
+</script>
+</main>
+</body>
+</html>
