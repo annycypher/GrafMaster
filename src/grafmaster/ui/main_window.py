@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, \
     QTabWidget, QVBoxLayout, QWidget
 
 from grafmaster import theme
+from grafmaster.core import fonts
 from grafmaster.ui.home_tab import HomeTab
 from grafmaster.ui.project_tab import ProjectTab
 from grafmaster.ui.settings_tab import SettingsTab
@@ -65,7 +66,8 @@ class MainWindow(QMainWindow):
         palette = theme.DARK if self._dark else theme.LIGHT
         if self._a11y:
             palette = theme.A11Y
-        self.setStyleSheet(theme.build_qss(palette, a11y=self._a11y))
+        self.setStyleSheet(
+            theme.build_qss(palette, a11y=self._a11y, font_family=fonts.preferred_family()))
         self.btn_theme.setText("🌙" if not self._dark else "☀️")
 
     def toggle_theme(self) -> None:

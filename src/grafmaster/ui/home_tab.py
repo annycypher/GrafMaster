@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
 )
 
 from grafmaster.ui.icon_library import IconLibraryDialog
+from grafmaster.ui.product_link_dialog import ProductLinkDialog
 from grafmaster.ui.widgets import CardView, SmallCard, make_ghost
 
 TEXTS = [
@@ -56,6 +57,11 @@ class HomeTab(QWidget):
         self.btn_search = make_ghost(QPushButton("Найти"))
         self.btn_search.hide()
         bar.addWidget(self.btn_search)
+
+        self.btn_link = QPushButton("🔗 Вставить ссылку")
+        self.btn_link.setToolTip("Окно «Товар по ссылке»: вставьте ссылку на товар")
+        self.btn_link.clicked.connect(self._open_link_dialog)
+        bar.addWidget(self.btn_link)
 
         bar.addStretch(1)
         for txt in ("Скачать JPG", "Скачать PDF", "Скачать SVG", "Скачать .fig"):
@@ -192,6 +198,9 @@ class HomeTab(QWidget):
         folder = QFileDialog.getExistingDirectory(self, "Выберите папку с материалами")
         if folder:
             self.lbl_counter.setText(f"Папка: {folder}")
+
+    def _open_link_dialog(self) -> None:
+        ProductLinkDialog(self).exec()
 
     def _pick_color(self) -> None:
         color = QColorDialog.getColor()

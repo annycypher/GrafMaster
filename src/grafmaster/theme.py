@@ -30,7 +30,7 @@ A11Y = {
 
 _QSS = Template("""
 QMainWindow, QDialog { background: $bg; }
-QWidget { color: $text; font-family: "Segoe UI", Arial; font-size: 13px; }
+QWidget { color: $text; font-family: "$font_family"; font-size: 13px; }
 QLabel#muted { color: $muted; }
 QTabWidget::pane { border: 1px solid $line; background: $panel; }
 QTabBar::tab { background: transparent; color: $muted; padding: 8px 18px; font-size: 14px; }
@@ -70,9 +70,9 @@ QListWidget::item { padding: 10px 12px; }
 """)
 
 
-def build_qss(palette: dict, a11y: bool = False) -> str:
-    """Собирает QSS-стиль приложения по палитре."""
-    qss = _QSS.substitute(**palette)
+def build_qss(palette: dict, a11y: bool = False, font_family: str = "Segoe UI") -> str:
+    """Собирает QSS-стиль приложения по палитре и семейству шрифта."""
+    qss = _QSS.substitute(font_family=font_family, **palette)
     if a11y:
-        qss += _A11Y_QSS.substitute(**palette)
+        qss += _A11Y_QSS.substitute(font_family=font_family, **palette)
     return qss
