@@ -118,13 +118,14 @@ def render_template_to_image(template, svg_path: str, w: int = 900,
 
 # ---------- Часть 2: EditorWindow ----------
 from PySide6.QtCore import Qt  # noqa: E402
-from PySide6.QtGui import QColor  # noqa: E402
 from PySide6.QtWidgets import (  # noqa: E402
-    QColorDialog, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QPushButton, QSplitter, QVBoxLayout, QWidget,
+    QFileDialog, QHBoxLayout, QLabel, QLineEdit, QListWidget, QListWidgetItem,
+    QPushButton, QSplitter, QVBoxLayout, QWidget,
 )
 
 from grafmaster.core import svg_parser  # noqa: E402
+from grafmaster.core import template_renderer  # noqa: E402
+from grafmaster.ui.card_data_panel import CardDataPanel  # noqa: E402
 from grafmaster.ui.widgets import make_ghost  # noqa: E402
 
 KIND_NAMES = {"bg": "Фон", "title": "Название", "photo": "Фото",
@@ -132,13 +133,13 @@ KIND_NAMES = {"bg": "Фон", "title": "Название", "photo": "Фото",
 
 
 class EditorWindow(QWidget):
-    """Графический редактор: шаблон бренда + перетаскивание слоёв в реальном времени."""
+    """Графический редактор: шаблон бренда + перетаскивание слоёв + данные карточки."""
 
     def __init__(self, brand: str, template_path: str,
                  parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self.setWindowTitle(f"Редактор — {brand}")
-        self.resize(1240, 800)
+        self.resize(1280, 800)
         self.brand = brand
         self.template_path = template_path
         self.template = svg_parser.parse_svg(template_path)
@@ -148,11 +149,8 @@ class EditorWindow(QWidget):
         bar.addWidget(QLabel("Бренд:"))
         self.lbl_brand = QLabel(brand)
         bar.addWidget(self.lbl_brand)
-        bar.addSpacing(24)
-        bar.addWidget(QLabel("Название товара:"))
-        self.inp_name = QLineEdit()
-        bar.addWidget(self.inp_name, 1)
-        self.btn_export = QPushButton("Сохранить PNG (900×1200)")
+        bar.addStretch(1)
+        self.btn_export = QPushButton("Собрать карточку (PNG 900×1200)")
         self.btn_export.clicked.connect(self._export)
         bar.addWidget(self.btn_export)
         self.btn_chat = make_ghost(QPushButton("💬 DeepSeek"))
@@ -164,27 +162,23 @@ class EditorWindow(QWidget):
 
         left = QWidget()
         lv = QVBoxLayout(left)
-        lv.addWidget(QLabel("Слои (перетащите, чтобы изменить порядок наложения):"))
+        lv.addWidget(QLabel("Слои (перетащите для порядка наложения):"))
         self.layers = QListWidget()
         self.layers.setDragDropMode(QListWidget.InternalMove)
         self.layers.setDefaultDropAction(Qt.MoveAction)
         self.layers.model().rowsMoved.connect(self._sync_layers)
-        self.layers.currentRowChanged.connect(self._select_layer)
         lv.addWidget(self.layers, 1)
-        lv.addWidget(QLabel("Свойства слоя:"))
-        self.inp_text = QLineEdit()
-        self.inp_text.setPlaceholderText("Текст слоя…")
-        self.inp_text.returnPressed.connect(self._apply_props)
-        lv.addWidget(self.inp_text)
-        self.btn_color = QPushButton("Цвет")
-        self.btn_color.clicked.connect(self._pick_color)
-        lv.addWidget(self.btn_color)
         split.addWidget(left)
 
         self.canvas = EditorCanvas()
-        self.canvas.layer_moved.connect(lambda _z: self._refresh_props())
+        self.canvas.layer_moved.connect(lambda _z: self.canvas.update())
         split.addWidget(self.canvas)
-        split.setSizes([320, 900])
+
+        self.panel = CardDataPanel(self.template, template_path)
+        self.panel.data_changed.connect(lambda: self.canvas.update())
+        split.addWidget(self.panel)
+
+        split.setSizes([240, 640, 320])
         root.addWidget(split, 1)
 
         self.canvas.set_template(self.template, template_path)
@@ -220,54 +214,18 @@ class EditorWindow(QWidget):
             self._rebuild_layers()
             self.canvas.update()
 
-    def _select_layer(self, row: int) -> None:
-        if row < 0:
-            return
-        z = self.layers.item(row).data(Qt.UserRole)
-        layer = next((l for l in self.template.layers if l.z == z), None)
-        if layer:
-            self.inp_text.setText(layer.text)
-            self.btn_color.setText(f"Цвет: {layer.fill}")
-
-    def _apply_props(self) -> None:
-        row = self.layers.currentRow()
-        if row < 0:
-            return
-        z = self.layers.item(row).data(Qt.UserRole)
-        layer = next((l for l in self.template.layers if l.z == z), None)
-        if layer:
-            layer.text = self.inp_text.text()
-            self.canvas.update()
-            self._rebuild_layers()
-            self.layers.setCurrentRow(row)
-
-    def _pick_color(self) -> None:
-        row = self.layers.currentRow()
-        if row < 0:
-            return
-        z = self.layers.item(row).data(Qt.UserRole)
-        layer = next((l for l in self.template.layers if l.z == z), None)
-        if layer is None:
-            return
-        start = QColor(layer.fill) if layer.fill.startswith("#") else QColor("#a855f7")
-        color = QColorDialog.getColor(start, self)
-        if color.isValid():
-            layer.fill = color.name()
-            self.btn_color.setText(f"Цвет: {layer.fill}")
-            self.canvas.update()
-
-    def _refresh_props(self) -> None:
-        self._select_layer(self.layers.currentRow())
-
-    # ---------- экспорт и чат ----------
+    # ---------- сборка карточки и чат ----------
 
     def _export(self) -> None:
         path, _ = QFileDialog.getSaveFileName(
             self, "Сохранить PNG", f"{self.brand}_card.png", "PNG (*.png)")
         if not path:
             return
-        img = render_template_to_image(self.template, self.template_path)
-        img.save(path)
+        name = self.panel.title() or self.template.name or "ТОВАР"
+        chars = self.panel.characteristics()
+        photo = self.panel.photo_path or None
+        template_renderer.render_card(
+            self.template, self.template_path, name, chars, photo, path)
         self.setWindowTitle(f"Редактор — {self.brand} (сохранено: {path})")
 
     def _open_chat(self) -> None:
