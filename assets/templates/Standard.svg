@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="900" height="1200" viewBox="0 0 900 1200">
+
+  <!-- Слой 0 (нижний): белый фон -->
+  <rect width="900" height="1200" fill="#ffffff"/>
+
+  <!-- Верхняя плашка и крупное название -->
+  <rect x="0" y="0" width="900" height="190" fill="#2563eb"/>
+  <text x="60" y="120" font-size="66" font-weight="700" fill="#ffffff" font-family="Russo One">ШУРУПОВЕРТ</text>
+
+  <!-- Слой 1: фото товара (на белом фоне) -->
+  <image x="70" y="220" width="760" height="520" xlink:href="photo.png"/>
+
+  <!-- Слой 2: иконки и характеристики -->
+  <g>
+    <rect x="70" y="790" width="360" height="96" rx="16" fill="#eef2ff"/>
+    <text x="120" y="848" font-size="30" font-family="Rubik" fill="#111827">Мощность</text>
+    <text x="700" y="850" font-size="36">⚡</text>
+    <rect x="470" y="790" width="360" height="96" rx="16" fill="#eef2ff"/>
+    <text x="520" y="848" font-size="30" font-family="Rubik" fill="#111827">500 Вт</text>
+  </g>
+  <g>
+    <rect x="70" y="910" width="360" height="96" rx="16" fill="#eef2ff"/>
+    <text x="120" y="968" font-size="30" font-family="Rubik" fill="#111827">Аккумулятор</text>
+    <text x="700" y="970" font-size="36">🔋</text>
+    <rect x="470" y="910" width="360" height="96" rx="16" fill="#eef2ff"/>
+    <text x="520" y="968" font-size="30" font-family="Rubik" fill="#111827">20 В</text>
+  </g>
+
+  <!-- Слой 3 (верхний): векторная графика / наложение -->
+  <path d="M0 1030 L900 1030 L900 1200 L0 1200 Z" fill="#1e3a8a"/>
+  <circle cx="840" cy="210" r="54" fill="#f59e0b" opacity="0.9"/>
+  <path d="M820 200 l14 12 l24 -30" stroke="#ffffff" stroke-width="10" fill="none"/>
+
+</svg>

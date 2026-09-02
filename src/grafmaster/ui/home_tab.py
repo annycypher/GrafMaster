@@ -73,6 +73,11 @@ class HomeTab(QWidget):
         self.btn_chat.clicked.connect(self._open_chat)
         bar.addWidget(self.btn_chat)
 
+        self.btn_editor = QPushButton("✏️ Редактор")
+        self.btn_editor.setToolTip("Графический редактор: бренд → шаблон → слои")
+        self.btn_editor.clicked.connect(self._open_editor)
+        bar.addWidget(self.btn_editor)
+
         bar.addStretch(1)
         for txt in ("Скачать JPG", "Скачать PDF", "Скачать SVG", "Скачать .fig"):
             bar.addWidget(make_ghost(QPushButton(txt)))
@@ -225,6 +230,18 @@ class HomeTab(QWidget):
             template = win.template
         self._chat_win = ChatWindow(template)
         self._chat_win.show()
+
+    def _open_editor(self) -> None:
+        from grafmaster.core import brand_catalog
+        from grafmaster.ui.brand_selector import BrandSelector
+        from grafmaster.ui.editor_window import EditorWindow
+        brand = BrandSelector.get_brand(self)
+        if not brand:
+            return
+        path = brand_catalog.template_for_brand(brand)
+        if path:
+            self._editor_win = EditorWindow(brand, str(path))
+            self._editor_win.show()
 
     def _pick_color(self) -> None:
         color = QColorDialog.getColor()
