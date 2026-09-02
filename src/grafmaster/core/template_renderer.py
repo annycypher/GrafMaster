@@ -39,9 +39,13 @@ def _qimage_from_pil(pil_img: Image.Image) -> QImage:
 
 def _assign_characteristics(template, characteristics):
     """Раздаёт характеристики по текстовым слоям: цифры->значения, слова->метки."""
+    title = next((l for l in template.layers
+                  if l.kind == "text" and l.text
+                  and l.y < template.height * 0.3 and l.font_size >= 40), None)
+    title_z = title.z if title else -1
     region = [l for l in template.layers
-              if l.kind == "text" and l.text
-              and 100 < l.y < template.height * 0.55
+              if l.kind == "text" and l.text and l.z != title_z
+              and 100 < l.y < template.height * 0.45
               and not any(h in l.text.upper() for h in STICKER_HINTS)]
     region.sort(key=lambda l: (round(l.y / 8), l.x))
     values = [l for l in region if any(c.isdigit() for c in l.text)]
