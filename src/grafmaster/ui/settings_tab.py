@@ -1,13 +1,18 @@
-"""Вкладка «Настройки»: ключ DeepSeek, движки, палитра, формат."""
+"""Вкладка «Настройки»: ключ DeepSeek, движки, палитра, шрифт, формат."""
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QColorDialog, QComboBox, QFormLayout, QLineEdit, QPushButton, QVBoxLayout,
     QWidget,
 )
 
+from grafmaster.core import fonts
+from grafmaster.ui.font_dialog import FontDialog
 from grafmaster.ui.widgets import make_ghost
 
 
 class SettingsTab(QWidget):
+    font_changed = Signal(str)
+
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         root = QVBoxLayout(self)
@@ -38,14 +43,26 @@ class SettingsTab(QWidget):
         self.inp_size = QLineEdit("900 × 1200 px")
         form.addRow("Размер", self.inp_size)
 
-        self.combo_font = QComboBox()
-        self.combo_font.addItems(["Inter", "Manrope", "Rubik"])
-        form.addRow("Шрифт", self.combo_font)
+        self.btn_font = QPushButton()
+        self.btn_font.clicked.connect(self._choose_font)
+        form.addRow("Шрифт (каталог 20)", self.btn_font)
 
         root.addLayout(form)
         root.addStretch(1)
+        self._update_font_label()
+
+    def _update_font_label(self) -> None:
+        self.btn_font.setText(f"🎨 Выбрать шрифт… (сейчас: {fonts.chosen_family()})")
+
+    def _choose_font(self) -> None:
+        family = FontDialog.get_font(fonts.chosen_family(), self)
+        if family:
+            fonts.set_chosen_family(family)
+            self._update_font_label()
+            self.font_changed.emit(family)
 
     def _pick_color(self) -> None:
         color = QColorDialog.getColor()
         if color.isValid():
             self.btn_color.setStyleSheet(f"background: {color.name()}; color: #fff;")
+

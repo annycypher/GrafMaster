@@ -51,6 +51,7 @@ class MainWindow(QMainWindow):
         self.project = ProjectTab()
         self.templates = TemplatesTab()
         self.settings = SettingsTab()
+        self.settings.font_changed.connect(self._font_changed)
         self.tabs.addTab(self.home, "Главная")
         self.tabs.addTab(self.project, "Проект карточек")
         self.tabs.addTab(self.templates, "Шаблоны")
@@ -79,3 +80,7 @@ class MainWindow(QMainWindow):
         self.apply_theme()
         self.btn_a11y.setStyleSheet(
             "border: 2px solid #a855f7; font-weight: 800;" if self._a11y else "")
+
+    def _font_changed(self, _family: str) -> None:
+        """Выбран новый шрифт в настройках — пересобираем тему/шрифт."""
+        self.apply_theme()

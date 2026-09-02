@@ -1,13 +1,12 @@
-# Шрифты
+# Шрифты (каталог 20+)
 
-Статические TTF **с полной поддержкой кириллицы**.
-Регистрируются при старте приложения (Qt) и используются для рендера
-карточек 900×1200 (Pillow). Лицензии: Inter, Rubik, Manrope — SIL OFL.
+Свободные шрифты **с полной поддержкой кириллицы** (лицензии OFL / Apache 2.0 —
+как шрифты в Figma). **Основной шрифт интерфейса — Russo One**
+(меняется: Настройки → «Шрифт (каталог 20)» → окно с предпоказом).
 
-Файлы:
-- `Inter-Regular.ttf`, `Inter-Medium.ttf`, `Inter-Bold.ttf`
-- `Rubik-Regular.ttf`, `Rubik-Medium.ttf`, `Rubik-Bold.ttf`
-- `Manrope-Regular.ttf`, `Manrope-Bold.ttf`
+Файлы вида `{Family}-Regular.ttf` генерируются скриптом `tools/download_fonts.py`
+(скачивание из google/fonts + конвертация вариативных шрифтов в статические).
 
-Исходные вариативные (`Inter.ttf`, `Rubik.ttf`, `Manrope.ttf`) и скрипт
-`tools/make_static_fonts.py` — для пересборки статических файлов.
+Каталог: Russo One, Montserrat, Open Sans, Roboto, Roboto Condensed, Oswald,
+Play, Exo 2, PT Sans, Lora, Merriweather, Playfair Display, Comfortaa, Jura,
+Cuprum, Forum, Caveat, Lobster, PT Serif, Raleway, Rubik, Manrope.
