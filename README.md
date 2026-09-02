@@ -6,9 +6,16 @@ Excel-характеристик и иконок. Сборка карточек,
 
 ## Запуск
 
+**Десктоп-приложение (Windows):**
+```bash
+pip install -r requirements-desktop.txt
+python src/main.py
+```
+
+**Веб-версия (в браузере):**
 ```bash
 pip install -r requirements.txt
-python src/main.py
+streamlit run web_app.py
 ```
 
 ## Возможности каркаса (Этап 1)
