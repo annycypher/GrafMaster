@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>GrafMaster — Центр тестирования</title>
+<style>
+  :root{--bg:#0d0714;--panel:#150b20;--panel2:#1c112e;--line:#39274f;--text:#f1eaff;--muted:#a58fc9;--accent:#a855f7;--accent2:#c084fc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(1200px 700px at 20% -10%,#2a1150 0%,var(--bg) 55%);color:var(--text);min-height:100vh}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 20px 60px}
+  h1{font-size:26px;margin-bottom:8px}
+  .sub{color:var(--muted);margin-bottom:26px}
+  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px;text-decoration:none;color:var(--text);transition:.15s}
+  .card:hover{box-shadow:0 0 22px rgba(168,85,247,.45);transform:translateY(-2px)}
+  .card .t{font-size:17px;font-weight:700;margin-bottom:4px}
+  .card .d{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .card .u{font-size:12px;color:var(--accent2);font-family:Consolas,monospace;word-break:break-all}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-right:8px}
+  .on{background:#a855f7;color:#fff;border:1px solid #c084fc;box-shadow:0 0 10px rgba(168,85,247,.6)}
+  .gray{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  ol{margin:6px 0 0 20px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎨 GrafMaster — Центр тестирования</h1>
+  <p class="sub">Все изменения сразу видны и доступны для тестирования. Обновите вкладку после каждой новой сборки.</p>
+
+  <a class="card" href="http://127.0.0.1:8501">
+    <div class="t">🖥 Веб-версия — тест функций (локально)</div>
+    <div class="d">Извлечение товара по ссылке, сборка карточки по шаблону бренда, скачивание PNG/SVG.</div>
+    <span class="tag on">РАБОТАЕТ СЕЙЧАС</span>
+    <div class="u">http://127.0.0.1:8501</div>
+    <ol>
+      <li>Если страница не открывается — запустите tools\start_web.bat и подождите 5–10 сек.</li>
+    </ol>
+  </a>
+
+  <a class="card" href="https://grafmaster-nfccbimsmjxmrrgw7zn7cl.streamlit.app/">
+    <div class="t">🌍 Веб-версия — публичная (всегда доступна)</div>
+    <div class="d">То же самое, развёрнуто на Streamlit Cloud. Обновляется автоматически при каждом push на GitHub.</div>
+    <span class="tag gray">ПОСТОЯННАЯ ССЫЛКА</span>
+    <div class="u">https://grafmaster-nfccbimsmjxmrrgw7zn7cl.streamlit.app/</div>
+  </a>
+
+  <a class="card" href="http://127.0.0.1:8899/UI_MOCKUPS.html">
+    <div class="t">🎛 Макеты интерфейса и галерея карточек</div>
+    <div class="d">Все 6 вариантов оформления, галерея собранных карточек, план и ТЗ.</div>
+    <span class="tag gray">ЛОКАЛЬНО</span>
+    <div class="u">http://127.0.0.1:8899/UI_MOCKUPS.html</div>
+  </a>
+
+  <a class="card" href="file:///C:/Users/Anna/.cline/data/workspaces/chat/GrafMaster/docs/ui-variant-6.html">
+    <div class="t">💜 Макет интерфейса GrafMaster Neon</div>
+    <div class="d">Интерактивный макет программы (вкладки, темы, лента карточек).</div>
+    <div class="u">docs\ui-variant-6.html</div>
+  </a>
+
+  <a class="card" href="https://github.com/annycypher/GrafMaster">
+    <div class="t">📦 GitHub — все изменения кода</div>
+    <div class="d">Коммиты, файлы, история сборки.</div>
+    <div class="u">https://github.com/annycypher/GrafMaster</div>
+  </a>
+</div>
+</body>
+</html>
