@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrafMaster — просмотр макетов интерфейса</title>
+<style>
+  :root{--bg:#0d0714;--panel:#150b20;--panel2:#1c112e;--line:#39274f;--text:#f1eaff;--muted:#a58fc9;--accent:#a855f7;--accent2:#c084fc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(1200px 700px at 20% -10%,#2a1150 0%,var(--bg) 55%);color:var(--text);min-height:100vh}
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 20px 60px}
+  h1{font-size:28px;margin-bottom:6px}
+  .sub{color:var(--muted);margin-bottom:26px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;transition:.15s;text-decoration:none;color:var(--text);display:block}
+  .card:hover{box-shadow:0 0 20px rgba(168,85,247,.4);transform:translateY(-2px)}
+  .card .num{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .card h2{font-size:17px;margin-bottom:6px}
+  .card p{font-size:13px;color:var(--muted);margin-bottom:12px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .approved{background:#a855f7;color:#fff;border:1px solid #c084fc;box-shadow:0 0 10px rgba(168,85,247,.6)}
+  .normal{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  .open{color:var(--accent2);font-size:13px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎨 GrafMaster — визуальные макеты</h1>
+  <p class="sub">Все 6 вариантов оформления + документация. Открывайте в браузере (Chrome/Edge). Макеты интерактивны: вкладки, темы, листание карточек, библиотека иконок.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="num">Вариант 6 · утверждён</div>
+      <h2>GrafMaster Neon (тёмный)</h2>
+      <p>Фиолетовый неон, тёмная + светлая темы ☀️/🌙, режим 👓 для слабовидящих (фиолетовые контуры), лента из 7 карточек, библиотека иконок по клику.</p>
+      <span class="badge approved">✓ Утверждён</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Вариант 5</div>
+      <h2>GrafMaster (тёмный + светлый)</h2>
+      <p>Раскладка «Менеджер», стиль CalcDocs, переключатель темы, логотип с палитрой художника.</p>
+      <span class="badge normal">Для сравнения</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Вариант 4</div>
+      <h2>CalcDocs (веб-сервис)</h2>
+      <p>Стиль calc-doc.ru: шапка, hero-блок, карточки-категории, подвал с конфиденциальностью.</p>
+      <span class="badge normal">Для сравнения</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Вариант 3</div>
+      <h2>Студия (тёмный редактор)</h2>
+      <p>Figma-подобный стиль: панель инструментов, холст с сеткой, слои справа.</p>
+      <span class="badge normal">Для сравнения</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Вариант 2</div>
+      <h2>Менеджер (вкладки сверху)</h2>
+      <p>Навигация вкладками, бирюзовая тема, панель движков и очереди внизу.</p>
+      <span class="badge normal">Для сравнения</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Вариант 1</div>
+      <h2>Классика (боковая панель)</h2>
+      <p>Тёмная боковая панель, разделы и движки слева, свойства справа.</p>
+      <span class="badge normal">Для сравнения</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Документы</div>
+      <h2>План разработки</h2>
+      <p>15 этапов с критериями проверки, архитектура, хранение на GitHub.</p>
+      <span class="badge normal">plan.html</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+    <div class="card">
+      <div class="num">Документы</div>
+      <h2>ТЗ и честный разбор</h2>
+      <p>Ответы на все вопросы: DeepSeek, Figma, .fig, движки, стоимость, железо.</p>
+      <span class="badge normal">otvet.html</span>
+      <div class="open">→ Открыть</div>
+    </div>
+
+  </div>
+</div>
+<script>
+  var map = {
+    "Вариант 6": "ui-variant-6.html",
+    "Вариант 5": "ui-variant-5.html",
+    "Вариант 4": "ui-variant-4.html",
+    "Вариант 3": "ui-variant-3.html",
+    "Вариант 2": "ui-variant-2.html",
+    "Вариант 1": "ui-variant-1.html",
+    "План разработки": "plan.html",
+    "ТЗ и честный разбор": "otvet.html"
+  };
+  document.querySelectorAll(".card").forEach(function (c) {
+    var h = c.querySelector("h2").textContent;
+    for (var key in map) {
+      if (h.indexOf(key) !== -1) {
+        c.href = map[key];
+        break;
+      }
+    }
+  });
+</script>
+</body>
+</html>
