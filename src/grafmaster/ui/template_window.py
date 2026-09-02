@@ -60,8 +60,11 @@ class TemplateWindow(QWidget):
     def _load(self) -> None:
         path, _ = QFileDialog.getOpenFileName(
             self, "Выберите SVG-шаблон", "", "SVG (*.svg)")
-        if not path:
-            return
+        if path:
+            self.load_path(path)
+
+    def load_path(self, path: str) -> None:
+        """Загружает SVG-шаблон по пути: разбор + предпросмотр + список слоёв."""
         try:
             tmpl = svg_parser.parse_svg(path)
         except Exception as exc:  # noqa: BLE001
@@ -74,6 +77,8 @@ class TemplateWindow(QWidget):
             kind = KIND_NAMES.get(layer.kind, layer.kind)
             if layer.kind == "photo":
                 label = f"{layer.z}: Фото товара ({int(layer.w)}×{int(layer.h)})"
+            elif layer.kind == "icon" and layer.href:
+                label = f"{layer.z}: Иконка ({int(layer.w)}×{int(layer.h)})"
             elif layer.text:
                 label = f"{layer.z}: {kind} — «{layer.text}»"
             else:
