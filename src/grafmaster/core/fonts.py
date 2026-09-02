@@ -13,11 +13,10 @@ ASSETS_FONTS = Path(__file__).resolve().parents[3] / "assets" / "fonts"
 
 # Файлы в assets/fonts (порядок = приоритет). Статические TTF с кириллицей.
 _FILES = [
-    "Inter-Regular.ttf", "Inter-Medium.ttf", "Inter-Bold.ttf",
     "Rubik-Regular.ttf", "Rubik-Medium.ttf", "Rubik-Bold.ttf",
     "Manrope-Regular.ttf", "Manrope-Bold.ttf",
 ]
-_PREFERRED = ("Inter", "Rubik", "Manrope", "Segoe UI", "Arial")
+_PREFERRED = ("Rubik", "Manrope", "Segoe UI", "Arial")
 
 
 def register_fonts() -> list[str]:
@@ -48,7 +47,7 @@ def default_font(size: int = 10) -> QFont:
     return QFont(preferred_family(), size)
 
 
-def font_path(name: str = "Inter-Regular.ttf") -> Path | None:
+def font_path(name: str = "Rubik-Regular.ttf") -> Path | None:
     """Путь к файлу шрифта для Pillow (рендер карточек 900×1200)."""
     path = ASSETS_FONTS / name
     return path if path.exists() else None
