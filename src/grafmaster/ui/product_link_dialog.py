@@ -11,13 +11,14 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from grafmaster.core import link_parser
+from grafmaster.core import card_builder, link_parser
 
 OUTPUT_PHOTOS = Path(__file__).resolve().parents[3] / "output" / "photos"
+OUTPUT_CARDS = Path(__file__).resolve().parents[3] / "output" / "cards"
 
 
 class _ExtractWorker(QThread):
-    done = Signal(str)
+    done = Signal(str, object)  # сводка + список ProductData
 
     def __init__(self, links: list[str], parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -25,9 +26,11 @@ class _ExtractWorker(QThread):
 
     def run(self) -> None:
         lines: list[str] = []
+        products: list[link_parser.ProductData] = []
         for url in self.links:
             try:
                 data = link_parser.extract_product(url)
+                products.append(data)
                 photo = None
                 if data.images:
                     folder = OUTPUT_PHOTOS / link_parser.safe_dir_name(data.name)
@@ -42,7 +45,7 @@ class _ExtractWorker(QThread):
                 lines.append("")
             except Exception as exc:  # noqa: BLE001
                 lines.append(f"ОШИБКА для {url}\n  {exc}\n")
-        self.done.emit("\n".join(lines))
+        self.done.emit("\n".join(lines), products)
 
 
 class ProductLinkDialog(QDialog):
@@ -75,10 +78,16 @@ class ProductLinkDialog(QDialog):
         self.btn_extract = QPushButton("Извлечь данные")
         self.btn_extract.clicked.connect(self._extract)
         btns.addWidget(self.btn_extract)
+        self.btn_cards = QPushButton("Собрать карточки (7 шт)")
+        self.btn_cards.setEnabled(False)
+        self.btn_cards.clicked.connect(self._build_cards)
+        btns.addWidget(self.btn_cards)
         self.btn_close = QPushButton("Закрыть")
         self.btn_close.clicked.connect(self.reject)
         btns.addWidget(self.btn_close)
         root.addLayout(btns)
+
+        self._products: list[link_parser.ProductData] = []
 
     def links(self) -> list[str]:
         return [ln.strip() for ln in self.inp_links.toPlainText().splitlines() if ln.strip()]
@@ -95,8 +104,27 @@ class ProductLinkDialog(QDialog):
         self._worker.done.connect(self._on_done)
         self._worker.start()
 
-    def _on_done(self, text: str) -> None:
+    def _on_done(self, text: str, products: list[link_parser.ProductData]) -> None:
+        self._products = products
         self.result.setPlainText(text)
-        self.status.setText("Готово. Проверьте результат; далее товары попадут в список.")
+        self.btn_cards.setEnabled(bool(products))
+        self.status.setText(
+            "Готово. Можно собрать карточки — кнопка «Собрать карточки (7 шт)».")
         self.btn_extract.setEnabled(True)
+
+    def _build_cards(self) -> None:
+        if not self._products:
+            return
+        lines: list[str] = []
+        for data in self._products:
+            photo = None
+            if data.images:
+                folder = OUTPUT_PHOTOS / link_parser.safe_dir_name(data.name)
+                photo = link_parser.download_image(data.images[0], folder)
+            chars = card_builder.pick_chars(data.characteristics)
+            out = OUTPUT_CARDS / link_parser.safe_dir_name(data.name)
+            files = card_builder.build_set(data.name, chars, photo, out)
+            lines.append(f"{data.name}: создано {len(files)} карточек → {out}")
+        self.result.appendPlainText("\n" + "\n".join(lines))
+        self.status.setText("Карточки собраны. Пути — в поле результата.")
 
