@@ -63,6 +63,16 @@ class HomeTab(QWidget):
         self.btn_link.clicked.connect(self._open_link_dialog)
         bar.addWidget(self.btn_link)
 
+        self.btn_template = QPushButton("🎨 Шаблон SVG")
+        self.btn_template.setToolTip("Окно загрузки векторного шаблона карточки")
+        self.btn_template.clicked.connect(self._open_template)
+        bar.addWidget(self.btn_template)
+
+        self.btn_chat = QPushButton("💬 DeepSeek")
+        self.btn_chat.setToolTip("Чат с DeepSeek: правки карточки в реальном времени")
+        self.btn_chat.clicked.connect(self._open_chat)
+        bar.addWidget(self.btn_chat)
+
         bar.addStretch(1)
         for txt in ("Скачать JPG", "Скачать PDF", "Скачать SVG", "Скачать .fig"):
             bar.addWidget(make_ghost(QPushButton(txt)))
@@ -201,6 +211,20 @@ class HomeTab(QWidget):
 
     def _open_link_dialog(self) -> None:
         ProductLinkDialog(self).exec()
+
+    def _open_template(self) -> None:
+        from grafmaster.ui.template_window import TemplateWindow
+        self._template_win = TemplateWindow()
+        self._template_win.show()
+
+    def _open_chat(self) -> None:
+        from grafmaster.ui.chat_window import ChatWindow
+        template = None
+        win = getattr(self, "_template_win", None)
+        if win is not None:
+            template = win.template
+        self._chat_win = ChatWindow(template)
+        self._chat_win.show()
 
     def _pick_color(self) -> None:
         color = QColorDialog.getColor()

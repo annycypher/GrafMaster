@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from grafmaster.core import fonts
+from grafmaster.core import deepseek, fonts
 from grafmaster.ui.font_dialog import FontDialog
 from grafmaster.ui.widgets import make_ghost
 
@@ -23,6 +23,9 @@ class SettingsTab(QWidget):
         self.inp_key = QLineEdit()
         self.inp_key.setPlaceholderText("sk-...")
         self.inp_key.setEchoMode(QLineEdit.Password)
+        self.inp_key.setText(deepseek.get_key())
+        self.inp_key.editingFinished.connect(
+            lambda: deepseek.set_key(self.inp_key.text().strip()))
         form.addRow("DeepSeek API-ключ (хранится локально)", self.inp_key)
 
         self.combo_build = QComboBox()
