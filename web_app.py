@@ -95,6 +95,8 @@ with TAB_BUILD:
         col1, col2 = st.columns(2)
         with col1:
             name = st.text_input("Название товара", value=template.name or "ТОВАР")
+            model = st.text_input("Модель (подпись, напр. GEOS CSP346)",
+                                  value="", placeholder="GEOS CSP346")
             uploaded = st.file_uploader("Фото товара (белый фон)",
                                         type=["png", "jpg", "jpeg"])
             labels = [l.text for l in template.layers
@@ -121,7 +123,7 @@ with TAB_BUILD:
                 st.markdown("### Результат (SVG → PNG в браузере)")
                 try:
                     out_svg = web_renderer.substitute_svg(
-                        template, svg_text, name, items, photo_path)
+                        template, svg_text, name, items, photo_path, model=model)
                     _svg_viewer(out_svg)
                     st.download_button("⬇ Скачать SVG (редактируемый)",
                                        out_svg, file_name=f"{brand}_card.svg",
